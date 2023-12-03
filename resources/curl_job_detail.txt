@@ -1,0 +1,22 @@
+curl 'https://www.linkedin.com/voyager/api/jobs/jobPostings/3754858155?decorationId=com.linkedin.voyager.deco.jobs.web.shared.WebFullJobPosting-65&topN=1&topNRequestedFlavors=List(TOP_APPLICANT,IN_NETWORK,COMPANY_RECRUIT,SCHOOL_RECRUIT,HIDDEN_GEM,ACTIVELY_HIRING_COMPANY)' \
+  -H 'authority: www.linkedin.com' \
+  -H 'accept: application/vnd.linkedin.normalized+json+2.1' \
+  -H 'accept-language: en-GB,en;q=0.9' \
+  -H 'cookie: liap=true; JSESSIONID="ajax:1114566029702419839"; bcookie="v=2&43945fb0-61f1-4c17-8ce9-88e3f5098ed6"; bscookie="v=1&202207040613041ab3a957-7df8-4051-8edf-6957d6a04a5dAQG9z3rq6v2hJt00RLGcQ33IGAbUCXFj"; PLAY_LANG=en; lang=v=2&lang=en-US; PLAY_SESSION=eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InNlc3Npb25faWQiOiJhYWZlN2NlYi0wMzUyLTQwODQtOGEyNy1jZTUzZTA1N2Y1NGZ8MTY3ODUzMDgwMCIsImFsbG93bGlzdCI6Int9IiwicmVjZW50bHktc2VhcmNoZWQiOiIiLCJyZWZlcnJhbC11cmwiOiJodHRwczovL3d3dy5nb29nbGUuY29tLyIsImFpZCI6IiIsIlJOVC1pZCI6InwwIiwicmVjZW50bHktdmlld2VkIjoiNTI4MTM4fDU2NDE4Mnw1NDk1NjN8NTU0NDcyIiwiQ1BULWlkIjoifcKTf0hVXGbDnMKsw5TCnkM9I8K7w6LCiCIsImV4cGVyaWVuY2UiOiJlbnRpdHkiLCJpc19uYXRpdmUiOiJmYWxzZSIsInRyayI6IiJ9LCJuYmYiOjE2Nzg1MzA4MTQsImlhdCI6MTY3ODUzMDgxNH0.ZqHKbbGoRnPsLz9HtYK92lrpeO592NGHuUGs-rJ1UgU; timezone=Europe/London; li_theme=light; li_theme_set=app; li_at=AQEDASOTr1sFFVqgAAABf05BKu8AAAGLqwaTgVYAqsJ0UDA0xpnEWUTK4ktSg-LssT6o48Ble89AJmdqxaJJdFT55CsdDybE3OEyEVrRMoyAUrSVk58W2CJN9RCBFOO0i-3K0iQHuK-LrjlQCnjsHEoS; li_alerts=e30=; lidc="b=TB43:s=T:r=T:a=T:p=T:g=3857:u=1248:x=1:i=1698924990:t=1698950828:v=2:sig=AQGs8_iYY2EI2UYZCCIeyFZgK-CueG8y"; li_mc=MTs0MjsxNjk4OTI1MTA4OzI7MDIxWm8MeQhAu8UVCzzCgg9BHQ8RSpQCPR8hk6XMRUL9DQc=; sdsc=22%3A1%2C1698925457250%7EJAPP%2C0zkcyiUPC3zNmP4k4%2Bt4hzOwOCPM%3D' \
+  -H 'csrf-token: ajax:1114566029702419839' \
+  -H 'referer: https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3754858155' \
+  -H 'sec-ch-ua: "Brave";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-origin' \
+  -H 'sec-gpc: 1' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
+  -H 'x-li-deco-include-micro-schema: true' \
+  -H 'x-li-lang: en_US' \
+  -H 'x-li-page-instance: urn:li:page:d_flagship3_jobs_discovery_jymbii;F3za/GhCSfmA4ty4MuneUg==' \
+  -H 'x-li-pem-metadata: Voyager - Careers - Job Details=job-posting' \
+  -H 'x-li-track: {"clientVersion":"1.13.5996","mpVersion":"1.13.5996","osName":"web","timezoneOffset":0,"timezone":"Europe/London","deviceFormFactor":"DESKTOP","mpName":"voyager-web","displayDensity":2,"displayWidth":3032,"displayHeight":908}' \
+  -H 'x-restli-protocol-version: 2.0.0' \
+  --compressed

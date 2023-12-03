@@ -1,0 +1,458 @@
+[
+  {
+    "data": {
+      "certifications": [
+        "IC3 Internet and Computing Core Certification"
+      ],
+      "education": [
+        {
+          "id": 40803285,
+          "organization": "WilliamWoods University City",
+          "accreditation": {
+            "education": "Bachelor of Science",
+            "educationLevel": "bachelors",
+            "inputStr": "Bachelor ofScience",
+            "matchStr": ""
+          },
+          "grade": {
+            "raw": "GPA: 3.4",
+            "value": "3.4",
+            "metric": "GPA"
+          },
+          "location": null,
+          "dates": {
+            "startDate": null,
+            "completionDate": "2014-05-01",
+            "isCurrent": false,
+            "rawText": "May 2014"
+          }
+        }
+      ],
+      "name": {
+        "raw": "John Doe"
+      },
+      "skills": [
+        {
+          "id": 441436111,
+          "emsiId": "ES46923913EBF2438BDF",
+          "name": "Network Infrastructure",
+          "lastUsed": "2014-05-01",
+          "numberOfMonths": 4,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "WorkExperience",
+              "position": 1,
+              "workExperienceId": 76262883
+            }
+          ]
+        },
+        {
+          "id": 441436112,
+          "emsiId": "KS1218W78FGVPVP2KXPX",
+          "name": "Management",
+          "lastUsed": "2014-05-01",
+          "numberOfMonths": 4,
+          "type": "soft_skill",
+          "sources": [
+            {
+              "section": "Projects",
+              "position": null,
+              "workExperienceId": null
+            },
+            {
+              "section": "WorkExperience",
+              "position": 1,
+              "workExperienceId": 76262883
+            }
+          ]
+        },
+        {
+          "id": 441436113,
+          "emsiId": "KS441K2756CXYXBG990G",
+          "name": "Troubleshooting (Problem Solving)",
+          "lastUsed": "2023-11-14",
+          "numberOfMonths": 108,
+          "type": "soft_skill",
+          "sources": [
+            {
+              "section": "Summary",
+              "position": null,
+              "workExperienceId": null
+            },
+            {
+              "section": "WorkExperience",
+              "position": 0,
+              "workExperienceId": 76262882
+            }
+          ]
+        },
+        {
+          "id": 441436114,
+          "emsiId": "KS7JMCC85O4ZRX0PYZPJ",
+          "name": "Mobileiron",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436115,
+          "emsiId": "KS441PC61LH6SWW9P97Q",
+          "name": "Usability",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Projects",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436116,
+          "emsiId": "KS121XY6VSGJ3Z6J82FQ",
+          "name": "Infrastructure",
+          "lastUsed": "2014-05-01",
+          "numberOfMonths": 4,
+          "type": "soft_skill",
+          "sources": [
+            {
+              "section": "WorkExperience",
+              "position": 1,
+              "workExperienceId": 76262883
+            }
+          ]
+        },
+        {
+          "id": 441436118,
+          "emsiId": "KS440JG6WST2V8SD4K2Y",
+          "name": "Microsoft SharePoint",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436119,
+          "emsiId": "KS1203W702ND09XHKJR5",
+          "name": "Accounting",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Projects",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436121,
+          "emsiId": "KS4408D6DYMSTKBP94N4",
+          "name": "SAP CRM",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436124,
+          "emsiId": "KS4419G6XM9LZWZ2Q9R8",
+          "name": "Telephony",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436125,
+          "emsiId": "KS1214767PZYMR0GM1G2",
+          "name": "Bomgar",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436126,
+          "emsiId": "KS127LD6F4RD4HBLW068",
+          "name": "Patchwork",
+          "lastUsed": "2014-05-01",
+          "numberOfMonths": 4,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "WorkExperience",
+              "position": 1,
+              "workExperienceId": 76262883
+            }
+          ]
+        },
+        {
+          "id": 441436127,
+          "emsiId": "KS1227Y68P23M2LCD1H1",
+          "name": "Computer Systems",
+          "lastUsed": "2023-11-14",
+          "numberOfMonths": 108,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "WorkExperience",
+              "position": 0,
+              "workExperienceId": 76262882
+            }
+          ]
+        },
+        {
+          "id": 441436117,
+          "emsiId": "KS120LP6CBTTJSY8HRC8",
+          "name": "App Store (IOS)",
+          "lastUsed": "2023-11-14",
+          "numberOfMonths": 108,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            },
+            {
+              "section": "WorkExperience",
+              "position": 0,
+              "workExperienceId": 76262882
+            }
+          ]
+        },
+        {
+          "id": 441436120,
+          "emsiId": "KS120SR6WD1FP76Z6GC2",
+          "name": "Customer Support",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Summary",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436122,
+          "emsiId": "KS4418D6RW4837XPT884",
+          "name": "Technical Assistance",
+          "lastUsed": "2023-11-14",
+          "numberOfMonths": 108,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "WorkExperience",
+              "position": 0,
+              "workExperienceId": 76262882
+            }
+          ]
+        },
+        {
+          "id": 441436123,
+          "emsiId": "KS120LB6XV5409BCQ0NF",
+          "name": "Technical Support",
+          "lastUsed": "2023-11-14",
+          "numberOfMonths": 108,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Summary",
+              "position": null,
+              "workExperienceId": null
+            },
+            {
+              "section": "WorkExperience",
+              "position": 0,
+              "workExperienceId": 76262882
+            }
+          ]
+        },
+        {
+          "id": 441436128,
+          "emsiId": "KS1205G5ZKS8ZZWVPM9Y",
+          "name": "Active Directory",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Skills/Interests/Languages",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        },
+        {
+          "id": 441436129,
+          "emsiId": "KS4424P6G7QVWXC3B756",
+          "name": "WordPress",
+          "lastUsed": null,
+          "numberOfMonths": null,
+          "type": "hard_skill",
+          "sources": [
+            {
+              "section": "Projects",
+              "position": null,
+              "workExperienceId": null
+            }
+          ]
+        }
+      ],
+      "languages": [
+        "English"
+      ],
+      "summary": "IT SUPPORT TECHNICIAN",
+      "totalYearsExperience": 10,
+      "profession": "Network Support Technician",
+      "workExperience": [
+        {
+          "id": 76262882,
+          "jobTitle": "IT Support Technician",
+          "organization": "Company Name City",
+          "location": {
+            "formatted": "United States",
+            "streetNumber": null,
+            "street": null,
+            "apartmentNumber": null,
+            "city": null,
+            "postalCode": null,
+            "state": null,
+            "country": "United States",
+            "rawInput": "State",
+            "countryCode": "US",
+            "latitude": 37.09024,
+            "longitude": -95.712891
+          },
+          "dates": {
+            "startDate": "2014-12-01",
+            "endDate": "2023-11-14",
+            "monthsInPosition": 108,
+            "isCurrent": true,
+            "rawText": "12/2014 to Current"
+          },
+          "jobDescription": "Provide technical assistance and support for incoming queries and issues related to computer systems, software, and hardware. Respond to queries either in person or over the phone. Vast troubleshooting capabilities with IOS. Train computer users Maintain daily performance ofcomputer systems. Process an average of 15-20 inbound and outbound technical support calls daily ",
+          "occupation": {
+            "jobTitle": "IT Support Technician",
+            "jobTitleNormalized": "IT Support Technician",
+            "classification": {
+              "socCode": 3132,
+              "title": "IT user support technicians",
+              "minorGroup": "Information Technology Technicians",
+              "subMajorGroup": "SCIENCE, ENGINEERING AND TECHNOLOGY ASSOCIATE PROFESSIONALS",
+              "majorGroup": "ASSOCIATE PROFESSIONAL OCCUPATIONS",
+              "minorGroupCode": 313,
+              "subMajorGroupCode": 31,
+              "majorGroupCode": 3
+            },
+            "managementLevel": "Low",
+            "emsiId": "ET5CEFA8C460957EF2"
+          }
+        },
+        {
+          "id": 76262883,
+          "jobTitle": "Network Assistant Intern",
+          "organization": "Company Name City , State",
+          "location": null,
+          "dates": {
+            "startDate": "2014-01-01",
+            "endDate": "2014-05-01",
+            "monthsInPosition": 4,
+            "isCurrent": false,
+            "rawText": "01/2014 to 05/2014"
+          },
+          "jobDescription": "Assisted University network administrator with daily tasks including \nwireless, VDI, patchwork Network infrastructure, hardware management, and server room operations. ",
+          "occupation": {
+            "jobTitle": "Network Assistant Intern",
+            "jobTitleNormalized": "Network Intern",
+            "classification": null,
+            "managementLevel": "Low",
+            "emsiId": "ET2B19DF0477DD4A54"
+          }
+        },
+        {
+          "id": 76262884,
+          "jobTitle": "Technology Assistant Intern",
+          "organization": "Company Name City",
+          "location": {
+            "formatted": "United States",
+            "streetNumber": null,
+            "street": null,
+            "apartmentNumber": null,
+            "city": null,
+            "postalCode": null,
+            "state": null,
+            "country": "United States",
+            "rawInput": "State",
+            "countryCode": "US",
+            "latitude": 37.09024,
+            "longitude": -95.712891
+          },
+          "dates": {
+            "startDate": "2013-08-01",
+            "endDate": "2014-05-01",
+            "monthsInPosition": 9,
+            "isCurrent": false,
+            "rawText": "08/2013 to 05/2014"
+          },
+          "jobDescription": "Maintained 489 page University website Managed and completed daily work orders for University Help Desk Attended weekly administrative technology meetings relating to technology problems/solutions. Managed/deployed hardware and software to student body as well as faculty. ",
+          "occupation": {
+            "jobTitle": "Technology Assistant Intern",
+            "jobTitleNormalized": "Technology Intern",
+            "classification": {
+              "socCode": 2139,
+              "title": "Information technology professionals n.e.c.",
+              "minorGroup": "Information Technology Professionals",
+              "subMajorGroup": "SCIENCE, RESEARCH, ENGINEERING AND TECHNOLOGY PROFESSIONALS",
+              "majorGroup": "PROFESSIONAL OCCUPATIONS",
+              "minorGroupCode": 213,
+              "subMajorGroupCode": 21,
+              "majorGroupCode": 2
+            },
+            "managementLevel": "Low",
+            "emsiId": "ET0D97A83FAB149741"
+          }
+        }
+      ]
+    }
+  }
+]

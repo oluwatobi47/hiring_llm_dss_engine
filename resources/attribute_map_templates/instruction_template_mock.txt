@@ -1,0 +1,40 @@
+"Preference": "Given the following context information below, use this to answer as truthfully as possible",
+"Intention": "To add a new job application to the existing applications for job role with id {x}",
+"Task": "A this new job application to the existing applications for job role with id x, having the following attributes
+---
+Candidate name: "John Doe"
+Location: "John Doe"
+Experience: "John Doe"
+Candidate name: "John Doe"
+Candidate name: "John Doe"
+Candidate name: "John Doe"
+"
+
+Job Application:
+
+Background
+"
+"
+
+Work Experience
+"
+prompt: Given that job applicant {applicantName} applied to this job, how many years of work experience does the candidate have ?
+response: "
+{applicantName} with applicationId {applicationId} has experience working as a {role} at {company} between {startDate} to {endDate}
+{applicantName} with applicationId {applicationId} has experience working as a {role} at {company} between {startDate} to present day
+"
+
+Skills
+"
+prompt: Given that job applicant {applicantName} applied to this job, what skills does the candidate have ?
+response: "
+{applicantName} with applicationId {applicationId} has experience working as a {role} at {company} between {startDate} to {endDate}
+{applicantName} with applicationId {applicationId} has experience working as a {role} at {company} between {startDate} to present day
+"
+
+Education
+
+"
+
+
+
