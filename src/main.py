@@ -1,24 +1,32 @@
-# Imports
-
 import traceback
 
-from fastapi import FastAPI
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from src.parsers.resume import ResumeParser
+
+from src.models.utility_models import ApiResponse
 from src.services.llm.training import generate_fine_tuning_data
-from src.utils import read_single_pdf, get_pdf_files
-from src.utils.service_simulator import MockJobApplication
-
+from src.routers import model
 # Load Environment Variables
 load_dotenv()
 
+# Initialize Fast API
 app = FastAPI()
+ALLOWED_ORIGINS = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.include_router(model.router)
 
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the Hiring LM Based DSS"}
+    return {"message": "Welcome to the Hiring LM Based DSS AI Engine"}
 
 
 @app.get("/generate-tuning-template")
@@ -31,33 +39,6 @@ def generate_tuning_data():
     except Exception as e:
         print(e)
         traceback.print_exc()
-        return {
-            "message": "Failed to generate tuning data"
-        }
+        return ApiResponse(message="Failed to generate tuning data", status="error")
 
-    return {
-        "message": "Generated the template successfully",
-        "data": output
-    }
-
-
-# Deprecated
-@app.get("/extract-resume-to-json")
-async def process_resume_to_json():
-    json_resumes = []
-    job_applications = MockJobApplication.get_mock_samples()
-    job_application: MockJobApplication
-    try:
-        for job_application in job_applications:
-            resume_str = read_single_pdf(job_application.resume_link)
-            parser = ResumeParser(resume_str)
-            json_resumes.append(parser.get_JSON())
-    except Exception as e:
-        print(e)
-        traceback.print_exc()
-
-    files = get_pdf_files("resources/data/candidate_resumes")
-    return {
-        'files': files,
-        'json_resume': json_resumes
-    }
+    return ApiResponse(data=output, message="Generated the template successfully", status="success")
