@@ -1,6 +1,8 @@
 import json
 from uuid import uuid4
 
+from fastapi import FastAPI
+
 
 def generate_unique_id():
     """
@@ -23,4 +25,13 @@ def pair_list_items(list1: list, list2: list) -> list:
         for item2 in list2:
             output.append([item, item2])
     return output
+
+
+def load_app_routes(app: FastAPI, routes: list):
+    for route in routes:
+        app.include_router(
+            route['router'],
+            prefix=route['prefix'],
+            tags=route['tags']
+        )
 

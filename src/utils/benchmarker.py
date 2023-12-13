@@ -32,7 +32,6 @@ class Benchmarker:
         :param kwargs: The function keyword arguments
         """
         self.start()
-        function(*args, **kwargs)
+        output = function(*args, **kwargs)
         self.end()
-        self.compute_execution_time()
-
+        return output

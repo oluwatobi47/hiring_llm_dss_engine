@@ -1,5 +1,5 @@
-from src.parsers import DataExtractor, KeytermExtractor
-from src.utils import TextCleaner, CountFrequency, generate_unique_id
+from src.parsers import DataExtractor
+from src.utils import TextCleaner, generate_unique_id
 
 
 class ResumeParser:

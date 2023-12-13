@@ -11,7 +11,3 @@ def generate_random_date(start_date, end_date):
 
     # Generate the random date
     return datetime(start_date + random_days)
-
-
-a = datetime.datetime(2023, 11, 1)
-a.str

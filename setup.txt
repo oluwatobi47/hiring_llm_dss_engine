@@ -1,0 +1,21 @@
+This description is specific to Apple Silicon devices
+For Apple Silicon Systems, Utilize Miniforge for conda environment management
+which has dependency and configuration support for Metal GPU
+
+Steps
+1. Install dependencies in requirements.txt
+2. For any additional errors on dependencies install them manually (using pip install <package>)
+3. Run pip install git+https://github.com/huggingface/transformers to install the most recent and stable version of the hugging face library (PS: May not be stable in future)
+4. If you encounter an issue loading a gguf model with LLamaCpp with a GPU layer: In a separate directory,
+ clone the llama-cpp-python project and run the following:
+    git clone https://github.com/abetlen/llama-cpp-python.git
+    cd llama-cpp-python
+    git submodule update --init --recursive
+    CMAKE_ARGS="-DLLAMA_METAL=on" pip install -e .
+    Source: https://github.com/abetlen/llama-cpp-python/issues/756
+5. For spacy models for resume parsing (Deprecated) Run the following commands:
+    python -m spacy download en_core_web_sm
+    python -m spacy download en_core_web_md
+
+For Quantization: Follow instructions on read me for the llama.cpp repository to quantize the fine-tuned model files:
+(For this project: this was done on colab)

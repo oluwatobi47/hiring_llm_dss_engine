@@ -1,28 +1,18 @@
 from typing import Optional
 
-import chromadb
+import logging
+import torch
+from langchain.llms import LlamaCpp
+from langchain.chat_models import ChatOllama
 from langchain.schema.callbacks.manager import CallbackManager
 from langchain.schema.language_model import BaseLanguageModel
+from llama_index import PromptTemplate
+from llama_index.llms import LangChainLLM, HuggingFaceLLM
 
-from llama_index import ServiceContext, SQLDatabase, set_global_service_context, PromptHelper, \
-    PromptTemplate
-from llama_index.storage.storage_context import StorageContext
 
-from llama_index.embeddings import HuggingFaceEmbedding
+from src.utils import Benchmarker
+
 # from IPython.display import Markdown, display
-
-from langchain.llms import LlamaCpp
-from llama_index.llms import LangChainLLM, HuggingFaceLLM, CustomLLM
-
-from sqlalchemy import create_engine
-
-from llama_index.query_engine import SQLJoinQueryEngine, RetrieverQueryEngine, SQLAutoVectorQueryEngine
-from llama_index.tools.query_engine import QueryEngineTool
-from llama_index.tools import ToolMetadata
-from llama_index.indices.vector_store import VectorIndexAutoRetriever
-from llama_index.query_engine import SubQuestionQueryEngine
-from llama_index.indices.struct_store.sql_query import NLSQLTableQueryEngine
-from llama_index.query_engine import SubQuestionQueryEngine
 
 
 SYSTEM_PROMPT = """
@@ -44,14 +34,18 @@ query_wrapper_prompt = PromptTemplate(
 
 
 class LocalGGufModelLoader:
-    model: BaseLanguageModel = None
+    _model: BaseLanguageModel = None
 
     def __init__(self, model_path: str, callback_manager: Optional[CallbackManager] = None):
-        n_gpu_layers = 1  # Metal set to 1 is enough.
+        n_gpu_layers = 1  # For Metal set to 1 | For CPU set to 0.
         n_batch = 2048  # Should be between 1 and n_ctx, consider the amount of RAM of your Apple Silicon Chip.
         # callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+        logger = logging.getLogger("LocalGGufModelLoader")
 
-        self.model = LlamaCpp(
+        bench_marker = Benchmarker()
+        logger.info("Loading LlamaCPP model")
+        bench_marker.start()
+        self._model = LlamaCpp(
             model_path=model_path,
             n_gpu_layers=n_gpu_layers,
             n_batch=n_batch,
@@ -61,38 +55,45 @@ class LocalGGufModelLoader:
             verbose=True,
             model_kwargs={
                 "query_wrapper_prompt": query_wrapper_prompt,
+                "device": torch.device("mps")
             },
             temperature=0.5,
         )
+        bench_marker.end()
+        logger.info(f"Model load execution time: {bench_marker.get_execution_time()}ms")
 
     def get_model(self) -> LlamaCpp:
-        return self.model
+        return self._model
 
     def get_model_in_langchain_form(self) -> LangChainLLM:
-        return LangChainLLM(llm=self.model)
+        return LangChainLLM(llm=self._model)
 
 
 class HFModelLoader:
-    model = None
+    _model = None
 
     def __init__(self, model_path: str, callback_manager: Optional[CallbackManager] = None):
         n_gpu_layers = 1  # Metal set to 1 is enough.
         n_batch = 2048  # Should be between 1 and n_ctx, consider the amount of RAM of your Apple Silicon Chip.
         # callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 
-        self.model = LlamaCpp(
-            model_path=model_path,
-            n_gpu_layers=n_gpu_layers,
-            n_batch=n_batch,
-            n_ctx=2048,
-            f16_kv=True,  # MUST set to True, otherwise you will run into problem after a couple of calls
-            callback_manager=callback_manager,
-            verbose=True,
-            model_kwargs={
-                "query_wrapper_prompt": query_wrapper_prompt,
-            },
-            temperature=0.5,
+        bench_marker = Benchmarker()
+        bench_marker.start()
+        self._model = HuggingFaceLLM(
+            context_window=2048,
+            max_new_tokens=512,
+            generate_kwargs={"temperature": 0.5, "do_sample": False},
+            system_prompt=COMPLETE_PROMPT,
+            model_name="oluwatobi-alao/llama2-hiring",
+            tokenizer_name="oluwatobi-alao/llama2-hiring",
+            device_map="auto",
+            stopping_ids=[50278, 50279, 50277, 1, 0],
+            tokenizer_kwargs={"max_length": 2048},
+            # uncomment this if using CUDA to reduce memory usage
+            model_kwargs={"torch_dtype": torch.float16}
         )
+        logger = logging.getLogger("HFModelLoader")
+        logger.info(f"Model load execution time: {bench_marker.get_execution_time()}ms")
 
     def get_model(self) -> LlamaCpp:
         return self.model

@@ -1,4 +1,4 @@
-from llama_index import VectorStoreIndex
+from llama_index import VectorStoreIndex, SimpleDirectoryReader
 from llama_index.vector_stores import ChromaVectorStore
 
 
@@ -24,6 +24,14 @@ def get_collection_index(vector_database, collection_name: str, service_context)
 
 def show_collection_data(collection):
     print(list(map(lambda a: a['ref_doc_id'], collection.get()["metadatas"])))
+
+
+def add_document_to_vector_store(store_index: VectorStoreIndex, file_path: str, entity_ref: str, ref_name: str):
+    """Function to create a document with required metadata and storing in vectore store with embeddings"""
+    document = SimpleDirectoryReader(input_files=[file_path]).load_data()
+    document[0].metadata['parent_obj_ref'] = entity_ref
+    document[0].metadata['ref_name'] = ref_name
+    store_index.insert(document[0])
 
 
 # Get vector indices

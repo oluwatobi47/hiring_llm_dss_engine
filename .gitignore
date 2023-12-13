@@ -36,3 +36,4 @@ build/
 /resources/model
 /resources/db
 __pycache__/
+/Miniforge3-MacOSX-arm64.sh

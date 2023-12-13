@@ -1,12 +1,16 @@
+import typing
+
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
+from typing import Optional, Union, Any
 
 from pydantic import BaseModel
-from responses import Response
+
+# Declare generic type for applicable models
+T = typing.TypeVar('T')
 
 
-class ModelType(Enum):
+class ModelType(str, Enum):
     """
     Enum representing supported model types
     """
@@ -14,7 +18,7 @@ class ModelType(Enum):
     HUGGING_FACE_GGUF = "GGUF",
 
 
-class InferenceRAGEngineType(Enum):
+class InferenceEngineType(str, Enum):
     """
     Enum representation for the supported Retrieval augmented generation combinations with
     the language model for inference and data insights
@@ -22,13 +26,6 @@ class InferenceRAGEngineType(Enum):
     # SQL = "SQL" (WIP)
     VECTOR = "VECTOR",
     VECTOR_AND_SQL = "VECTOR_AND_SQL"
-
-
-    """
-    Enum representing supported model types
-    """
-    HUGGING_FACE = "HF",
-    HUGGING_FACE_GGUF = "GGUF",
 
 
 class DownloadModelRequest(BaseModel):
@@ -41,9 +38,15 @@ class DownloadModelRequest(BaseModel):
     model_file_name: Optional[str]
 
 
-@dataclass
-class ApiResponse:
-    status: Optional[str]
-    message: Optional[any] = None
-    data: Optional[any] = None
+# @dataclass
+class ApiResponse(BaseModel, typing.Generic[T]):
+    status: str = "success"
+    message: Optional[Union[str, None]] = None
+    data: Optional[Union[T, Any, None]] = None
 
+    def __init__(self, status="success", message: Optional[Union[str, None]] = "",
+                 data: Optional[Union[T, Any, None]] = None, *args, ** kwargs):
+        super().__init__(*args, **kwargs)
+        self.status = status
+        self.message = message
+        self.data = data

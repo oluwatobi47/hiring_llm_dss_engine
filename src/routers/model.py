@@ -6,11 +6,11 @@ from fastapi import APIRouter, BackgroundTasks
 from src.models.utility_models import DownloadModelRequest, ModelType, ApiResponse
 from src.scripts import download_hf_model
 
-router = APIRouter(prefix="/model")
+router = APIRouter()
 
 
 @router.post("/download/")
-async def download_model(bg_tasks: BackgroundTasks, request: Optional[DownloadModelRequest] = None):
+async def download_model(bg_tasks: BackgroundTasks, request: Optional[DownloadModelRequest] = None) -> ApiResponse:
     # output = None
     try:
         if not request:
