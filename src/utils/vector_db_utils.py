@@ -1,4 +1,8 @@
+import os
+from typing import Union, Optional
+
 from llama_index import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.embeddings import HuggingFaceEmbedding
 from llama_index.vector_stores import ChromaVectorStore
 
 
@@ -29,9 +33,25 @@ def show_collection_data(collection):
 def add_document_to_vector_store(store_index: VectorStoreIndex, file_path: str, entity_ref: str, ref_name: str):
     """Function to create a document with required metadata and storing in vectore store with embeddings"""
     document = SimpleDirectoryReader(input_files=[file_path]).load_data()
-    document[0].metadata['parent_obj_ref'] = entity_ref
-    document[0].metadata['ref_name'] = ref_name
-    store_index.insert(document[0])
+    if len(document) > 0:
+        for doc in document:
+            doc.metadata['parent_obj_ref'] = entity_ref
+            doc.metadata['ref_name'] = ref_name
+            store_index.insert(doc)
+
+
+embedding_model: Union[HuggingFaceEmbedding, None] = None
+
+
+def get_embedding_model(model_cache_path: Optional[str] = None) -> HuggingFaceEmbedding:
+    global embedding_model
+    if embedding_model is None:
+        embedding_model = HuggingFaceEmbedding(
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            tokenizer_name="sentence-transformers/all-MiniLM-L6-v2",
+            cache_folder=model_cache_path if model_cache_path is not None else os.getenv("EMBEDDING_MODEL_CACHE")
+        )
+    return embedding_model
 
 
 # Get vector indices

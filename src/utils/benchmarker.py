@@ -34,4 +34,5 @@ class Benchmarker:
         self.start()
         output = function(*args, **kwargs)
         self.end()
+        self.compute_execution_time()
         return output

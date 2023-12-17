@@ -39,4 +39,4 @@ def generate_inference(request: InferencePrompt) -> ApiResponse:
         print(e)
         traceback.print_exc()
         return ApiResponse(status="error", message=str(e))
-    return ApiResponse(status="success", data=response.response)
+    return ApiResponse(status="success", data=response)

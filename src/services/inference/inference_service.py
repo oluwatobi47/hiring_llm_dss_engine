@@ -50,6 +50,7 @@ class VectorInferenceService(InferenceService):
             vector_database = load_chroma_client()
             embed_model = HuggingFaceEmbedding(
                 model_name="sentence-transformers/all-MiniLM-L6-v2",
+                tokenizer_name="sentence-transformers/all-MiniLM-L6-v2",
                 cache_folder=os.getenv("EMBEDDING_MODEL_CACHE")
             )
             self.service_context = ServiceContext.from_defaults(llm=self.model, embed_model=embed_model)
@@ -97,6 +98,7 @@ class SQLAndVectorInferenceService(VectorInferenceService):
             vector_database = load_chroma_client()
             embed_model = HuggingFaceEmbedding(
                 model_name="sentence-transformers/all-MiniLM-L6-v2",
+                tokenizer_name="sentence-transformers/all-MiniLM-L6-v2",
                 cache_folder=os.getenv("EMBEDDING_MODEL_CACHE")
             )
             self.service_context = ServiceContext.from_defaults(llm=self.model, embed_model=embed_model)
@@ -128,28 +130,34 @@ class SQLAndVectorInferenceService(VectorInferenceService):
             # Construct SQL based query engine
             sql_db_uri = os.getenv("CLIENT_DB_URI")
             sql_engine = load_db_client(sql_db_uri)
+            sql_query_engine_indices = []
 
             # define llama_index sql dependencies
+            #TODO: Complete Implementation for SQL Update
             sql_db = SQLDatabase(engine=sql_engine)
-            sql_query_engine = NLSQLTableQueryEngine(sql_database=sql_db, service_context=self.service_context)
+            tables = ["company_info", "job_description", "job_post", "job_application"]
+            for table in tables:
+                query_engine = NLSQLTableQueryEngine(sql_database=sql_db, service_context=self.service_context,
+                                                     tables=[table])
+                sql_query_engine_indices.append(query_enginegit)
 
-            sql_tool = QueryEngineTool.from_defaults(
-                query_engine=sql_query_engine,
-                description=(
-                        "Useful for translating a natural language query into a SQL query over the following four tables:"
-                        + " company_info, job_post, job_description and job_application with relationships between these"
-                        + " four tables using join queries and id references where necessary"
-                ),
-            )
-            vec_engine_tool = QueryEngineTool.from_defaults(
-                query_engine=vector_engine,
-                description=("Useful for answering semantic questions about job descriptions and job application"
-                             + " resumes based on document embeddings"),
-            )
-
-            self.query_engine = SQLJoinQueryEngine(
-                sql_tool, vec_engine_tool, service_context=self.service_context
-            )
+            # sql_tool = ComposableGraph..from_defaults(
+            #     query_engine=sql_query_engine,
+            #     description=(
+            #             "Useful for translating a natural language query into a SQL query over the following four tables:"
+            #             + " company_info, job_post, job_description and job_application with relationships between these"
+            #             + " four tables using join queries and id references where necessary"
+            #     ),
+            # )
+            # vec_engine_tool = QueryEngineTool.from_defaults(
+            #     query_engine=vector_engine,
+            #     description=("Useful for answering semantic questions about job descriptions and job application"
+            #                  + " resumes based on document embeddings"),
+            # )
+            #
+            # self.query_engine = SQLJoinQueryEngine(
+            #     sql_tool, vec_engine_tool, service_context=self.service_context
+            # )
         return self.query_engine
 
 

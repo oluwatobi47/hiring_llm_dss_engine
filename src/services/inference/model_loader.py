@@ -50,6 +50,7 @@ class LocalGGufModelLoader:
             n_gpu_layers=n_gpu_layers,
             n_batch=n_batch,
             n_ctx=2048,
+            max_new_tokens=4096,
             f16_kv=True,  # MUST set to True, otherwise you will run into problem after a couple of calls
             callback_manager=callback_manager,
             verbose=True,
@@ -81,7 +82,7 @@ class HFModelLoader:
         bench_marker.start()
         self._model = HuggingFaceLLM(
             context_window=2048,
-            max_new_tokens=512,
+            max_new_tokens=4096,
             generate_kwargs={"temperature": 0.5, "do_sample": False},
             system_prompt=COMPLETE_PROMPT,
             model_name="oluwatobi-alao/llama2-hiring",

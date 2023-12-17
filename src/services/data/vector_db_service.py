@@ -2,6 +2,9 @@ import os
 
 import chromadb
 from chromadb.api import ClientAPI
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv('.env'))
 
 
 class SimpleVectorDBConnectionFactory:
@@ -17,9 +20,10 @@ class SimpleVectorDBConnectionFactory:
 dbConnectionFactory = SimpleVectorDBConnectionFactory()
 
 
-def load_chroma_client(db_uri: str) -> ClientAPI:
+def load_chroma_client(db_uri: str = None) -> ClientAPI:
     """Loads instance of chroma db client in application, if db URI is not specified, application uses
      CHROMA_PATH value defined in the environment variables
+     TODO: Check how single instance performs
     """
     db_uri = db_uri if db_uri is not None else os.getenv('CHROMA_PATH')
     return dbConnectionFactory.create_connection(db_uri)

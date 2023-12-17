@@ -34,6 +34,9 @@ build/
 .vscode/
 
 /resources/model
+/resources/dataset
 /resources/db
 __pycache__/
 /Miniforge3-MacOSX-arm64.sh
+
+.DS_Store

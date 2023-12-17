@@ -19,6 +19,6 @@ def download_hf_model(
     """
     repo_id = os.environ.get("GGUF_MODEL_REPO") if repo_id is None else repo_id
     file_name = os.environ.get("GGUF_MODEL_NAME") if file_name is None else file_name
-    local_dir = os.environ.get("DEFAULT_MODEL_PATH") if local_dir is None else local_dir
+    local_dir = os.environ.get("MODEL_DIR") if local_dir is None else local_dir
     return hf_hub_download(repo_id=repo_id, filename=file_name, local_dir=local_dir, resume_download=True)
 

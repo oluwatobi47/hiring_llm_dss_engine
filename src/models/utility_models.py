@@ -38,6 +38,16 @@ class DownloadModelRequest(BaseModel):
     model_file_name: Optional[str]
 
 
+class UploadModelRequest(BaseModel):
+    """
+    Model representing model download request from hugging face
+    Required as part of deployment or initial setup workflow
+    """
+    model_path: str
+    repo_id: str
+    model_file_name: Optional[str]
+
+
 # @dataclass
 class ApiResponse(BaseModel, typing.Generic[T]):
     status: str = "success"
@@ -45,8 +55,8 @@ class ApiResponse(BaseModel, typing.Generic[T]):
     data: Optional[Union[T, Any, None]] = None
 
     def __init__(self, status="success", message: Optional[Union[str, None]] = "",
-                 data: Optional[Union[T, Any, None]] = None, *args, ** kwargs):
-        super().__init__(*args, **kwargs)
+                 data: Optional[Union[T, Any, None]] = None, *args, **kwargs):
+        super().__init__(**kwargs)
         self.status = status
         self.message = message
         self.data = data
