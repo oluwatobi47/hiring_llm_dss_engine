@@ -1,14 +1,12 @@
+import logging
 from typing import Optional
 
-import logging
 import torch
 from langchain.llms import LlamaCpp
-from langchain.chat_models import ChatOllama
 from langchain.schema.callbacks.manager import CallbackManager
 from langchain.schema.language_model import BaseLanguageModel
 from llama_index import PromptTemplate
 from llama_index.llms import LangChainLLM, HuggingFaceLLM
-
 
 from src.utils import Benchmarker
 
@@ -49,14 +47,14 @@ class LocalGGufModelLoader:
             model_path=model_path,
             n_gpu_layers=n_gpu_layers,
             n_batch=n_batch,
-            n_ctx=2048,
-            max_new_tokens=4096,
+            n_ctx=3072,  # 2560, 2048
             f16_kv=True,  # MUST set to True, otherwise you will run into problem after a couple of calls
             callback_manager=callback_manager,
             verbose=True,
             model_kwargs={
                 "query_wrapper_prompt": query_wrapper_prompt,
-                "device": torch.device("mps")
+                "device": torch.device("mps"),
+                "max_new_tokens": 4096,
             },
             temperature=0.5,
         )

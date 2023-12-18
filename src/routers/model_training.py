@@ -27,6 +27,8 @@ def train_model(request: TrainModelRequest, bg_tasks: BackgroundTasks) -> ApiRes
         dataset = load_dataset("json", data_files=request.dataset_path)
         processed_dataset = prompt_generator(dataset, "llama")
         print(type(processed_dataset))
+
+        # TODO: Uncomment when running on powerful computing device (GPU: RAM Intensive operation)
         # Set pre-trained foundation model path: This path could be to a local directory or a hugging face repository
         # pretrained_model_path = os.getenv("TRAINING_BASE_MODEL")
         # model_trainer = LLamaModelTrainer(pretrained_model_path, )

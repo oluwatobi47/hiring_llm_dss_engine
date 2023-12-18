@@ -18,6 +18,8 @@ class InferencePrompt(BaseModel):
 # Initialize inference Service factory
 inference_service_factory = InferenceServiceFactory()
 
+# PS/NOTE: The Integration into SQL data sources is currently experimental,
+# challenges were observed with inconsistent results due to minimal or low capability of handling entity relations
 # Initialize inference Service based on vector document embeddings and SQL data sources
 inference_service: InferenceService = inference_service_factory.create_inference_service(
     model_type=ModelType.HUGGING_FACE_GGUF,
@@ -32,9 +34,13 @@ document_inference_service: InferenceService = inference_service_factory.create_
 
 
 @router.post("/generate-inference")
-def generate_inference(request: InferencePrompt) -> ApiResponse:
+def generate_inference(request: InferencePrompt,
+                       engine_type: InferenceEngineType = InferenceEngineType.VECTOR) -> ApiResponse:
     try:
-        response = document_inference_service.generate_response(request.prompt)
+        if engine_type == InferenceEngineType.VECTOR:
+            response = document_inference_service.generate_response(request.prompt)
+        else:
+            response = inference_service.generate_response(request.prompt)
     except Exception as e:
         print(e)
         traceback.print_exc()

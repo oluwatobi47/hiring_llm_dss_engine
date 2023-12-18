@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.routers import model_training_router, model_utility_router, data_pipeline_router  # , inference_router
+from src.routers import model_training_router, model_utility_router, data_pipeline_router, inference_router
 from src.utils import load_app_routes
 
 # Load Environment Variables
@@ -12,6 +12,8 @@ load_dotenv('.env')
 app = FastAPI(
     title="Hiring DSS ML Engine",
 )
+
+# Load middlewares/interceptors
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,18 +21,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-# Load application routes
+
+# Load application API endpoint routes
 load_app_routes(app, [
     {
         'prefix': '/model',
         'tags': ['Model Utilities: Background operations (Download/Upload)'],
         'router': model_utility_router
     },
-    # {
-    #     'prefix': '/inference',
-    #     'tags': ['Model Inference'],
-    #     'router': inference_router
-    # },
+    {
+        'prefix': '/inference',
+        'tags': ['Model Inference generation on data sources'],
+        'router': inference_router
+    },
     {
         'prefix': '/pipeline',
         'tags': ['Data Pipeline Processing'],
@@ -44,6 +47,7 @@ load_app_routes(app, [
 ])
 
 
+# Entry/Root API Endpoint Resource
 @app.get("/")
 async def root():
     return {"message": "Welcome to the Hiring LM Based DSS AI Engine, Access the docs on /docs"}
