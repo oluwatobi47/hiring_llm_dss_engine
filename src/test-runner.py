@@ -1,6 +1,8 @@
 import json
+import datetime
 
-from src.main import generate_tuning_data
+
+# from src.main import generate_tuning_data
 
 
 def read_json(json_file_path: str) -> dict:
@@ -37,9 +39,10 @@ def get_properties(obj: dict, parent: str = None):
 
 
 if __name__ == "__main__":
-    data = read_json('../resources/data/raw-it_support_proffessional.json')
+    print(datetime.date.fromtimestamp(904867200))
+    # data = read_json('../resources/data/raw-it_support_proffessional.json')
     # if data[0]['data'] is not None:
     #     attr = get_properties(data[0]['data'])
     #     print(attr)
-    generate_tuning_data()
+    # generate_tuning_data()
 

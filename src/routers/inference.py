@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from src.models.utility_models import InferenceEngineType, ModelType, ApiResponse
-from src.services.inference import InferenceServiceFactory, InferenceService
+from src.services.inference import InferenceService, inference_service_factory
 
 router = APIRouter()
 
@@ -14,9 +14,6 @@ class InferencePrompt(BaseModel):
     prompt: str
     context: Optional[str] = None
 
-
-# Initialize inference Service factory
-inference_service_factory = InferenceServiceFactory()
 
 # PS/NOTE: The Integration into SQL data sources is currently experimental,
 # challenges were observed with inconsistent results due to minimal or low capability of handling entity relations

@@ -3,20 +3,22 @@ import glob
 from pypdf import PdfReader
 
 
-def get_pdf_files(file_path):
+def get_files(file_path, extension_matcher: str='*.pdf'):
     """
     Get all PDF files from the specified file path.
 
     Args:
         file_path (str): The directory path containing the PDF files.
+        extension_matcher (str): The file extension
 
     Returns:
         list: A list containing the paths of all the PDF files in the directory.
     """
     if os.path.exists(file_path):
-        return glob.glob(os.path.join(file_path, '*.pdf'))
+        return glob.glob(os.path.join(file_path, extension_matcher))
     else:
         return []
+
 
 #
 # def get_pdf_files(file_path: str) -> list:
@@ -47,7 +49,7 @@ def read_multiple_pdf(file_path: str) -> list:
     Returns:
         list: A list containing the extracted text from each page of the PDF files.
     """
-    pdf_files = get_pdf_files(file_path)
+    pdf_files = get_files(file_path)
     output = []
     for file in pdf_files:
         try:
@@ -83,4 +85,3 @@ def read_single_pdf(file_path: str) -> str:
     except Exception as e:
         print(f"Error reading file '{file_path}': {str(e)}")
     return str(" ".join(output))
-

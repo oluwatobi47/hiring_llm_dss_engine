@@ -1,0 +1,72 @@
+{
+  "TC1": {
+    "code": "TC1",
+    "summary": "Test case contains information on 2 Job descriptions, 1 Job post and 2 job applications",
+    "job_descriptions": 2,
+    "job_posts": 1,
+    "job_applications": 2
+  },
+  "TC2": {
+    "code": "TC2",
+    "summary": "Test case contains information on 3 Job descriptions, 2 Job posts and 3 job applications",
+    "job_descriptions": 3,
+    "job_posts": 2,
+    "job_applications": 3
+  },
+  "TC3": {
+    "code": "TC3",
+    "summary": "Test case contains information on 5 Job descriptions, 3 Job posts and 5 job applications",
+    "job_descriptions": 5,
+    "job_posts": 3,
+    "job_applications": 5
+  },
+  "TC4": {
+    "code": "TC4",
+    "summary": "Test case contains information on 5 Job descriptions, 5 Job posts and 10 job applications",
+    "job_descriptions": 5,
+    "job_posts": 5,
+    "job_applications": 10
+  },
+  "TC5": {
+    "code": "TC5",
+    "summary": "Test case contains information on 10 Job descriptions, 5 Job posts and 10 job applications",
+    "job_descriptions": 10,
+    "job_posts": 5,
+    "job_applications": 10
+  },
+  "TC6": {
+    "code": "TC6",
+    "summary": "Test case contains information on 10 Job descriptions, 10 Job posts and 10 job applications",
+    "job_descriptions": 10,
+    "job_posts": 10,
+    "job_applications": 10
+  },
+  "TC7": {
+    "code": "TC7",
+    "summary": "Test case contains information on 10 Job descriptions, 10 Job posts and 20 job applications",
+    "job_descriptions": 10,
+    "job_posts": 10,
+    "job_applications": 20
+  },
+  "TC8": {
+    "code": "TC8",
+    "job_descriptions": 20,
+    "summary": "Test case contains information on 20 Job descriptions, 10 Job posts and 20 job applications",
+    "job_posts": 10,
+    "job_applications": 20
+  },
+  "TC9": {
+    "code": "TC9",
+    "summary": "Test case contains information on 20 Job descriptions, 10 Job posts and 50 job applications",
+    "job_descriptions": 20,
+    "job_posts": 10,
+    "job_applications": 50
+  },
+  "TC10": {
+    "code": "TC10",
+    "summary": "Test case contains information on 20 Job descriptions, 20 Job posts and 100 job applications",
+    "job_descriptions": 20,
+    "job_posts": 20,
+    "job_applications": 100
+  }
+}

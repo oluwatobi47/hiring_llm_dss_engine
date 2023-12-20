@@ -1,6 +1,7 @@
 import os
 
 import chromadb
+from chromadb import Settings
 from chromadb.api import ClientAPI
 from dotenv import load_dotenv, find_dotenv
 
@@ -12,7 +13,12 @@ class SimpleVectorDBConnectionFactory:
 
     def create_connection(self, db_uri: str) -> ClientAPI:
         if db_uri not in self._connection_map:
-            self._connection_map[db_uri] = chromadb.PersistentClient(path=db_uri)
+            settings = Settings(
+                persist_directory=db_uri,
+                is_persistent=True,
+            )
+            settings.allow_reset = True
+            self._connection_map[db_uri] = chromadb.PersistentClient(path=db_uri, settings=settings)
         return self._connection_map[db_uri]
 
 

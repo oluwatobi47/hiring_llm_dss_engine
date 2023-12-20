@@ -1,6 +1,7 @@
 import logging
 import os
 
+from chromadb.api import ClientAPI
 from langchain.schema.language_model import BaseLanguageModel
 from llama_index import ServiceContext, Response, SQLDatabase, VectorStoreIndex, StorageContext, ComposableGraph
 from llama_index.core import BaseQueryEngine
@@ -9,8 +10,8 @@ from llama_index.indices.struct_store import SQLTableRetrieverQueryEngine
 from llama_index.objects import SQLTableNodeMapping, SQLTableSchema, ObjectIndex
 from llama_index.query_engine import SubQuestionQueryEngine, SQLJoinQueryEngine
 from llama_index.tools import QueryEngineTool, ToolMetadata
+from sqlalchemy import Engine
 
-from src.services.data import load_db_client, load_chroma_client
 from src.utils import Benchmarker
 from src.utils.vector_db_utils import vector_collection_data, get_collection_index, get_collection_and_vector_store, \
     get_index
@@ -28,9 +29,13 @@ class InferenceService:
     def generate_response(self, prompt: str) -> str:
         pass
 
+    def refresh_datasource(self):
+        self.query_engine = self._construct_query_engine()
+
 
 class VectorInferenceService(InferenceService):
-    def __init__(self, model):
+    def __init__(self, model, vector_db: ClientAPI):
+        self.vector_database = vector_db
         self.model = model
         self.metadata = {
             'model_specs': model.config_specs,
@@ -43,7 +48,6 @@ class VectorInferenceService(InferenceService):
         Uses a composable graph for building a query engine instance for the vector documents
         :return: A BaseQueryEngine
         """
-        vector_database = load_chroma_client()
         embed_model = HuggingFaceEmbedding(
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             tokenizer_name="sentence-transformers/all-MiniLM-L6-v2",
@@ -59,7 +63,7 @@ class VectorInferenceService(InferenceService):
         for info in vector_collection_data:
             name = info['name']
             label = info['label']
-            coll, store = get_collection_and_vector_store(vector_database, name)
+            coll, store = get_collection_and_vector_store(self.vector_database, name)
             vector_stores[name] = store
             vector_indices[name] = get_index(store, service_context=self.service_context)
             index_summaries.append(f"Provides detailed information about {label}")
@@ -76,11 +80,16 @@ class VectorInferenceService(InferenceService):
         print(f">>>Model load execution time: {bm.get_execution_time()}ms")
         return result.response
 
+    def refresh_datasource(self):
+        self.query_engine = self._construct_query_engine()
+
 
 class SQLAndVectorInferenceService(VectorInferenceService):
-    def __init__(self, model):
-        super().__init__(model)
-        self.model = model
+    sql_client_engine = None
+
+    def __init__(self, model, vector_db: ClientAPI, sql_db_engine: Engine):
+        self.sql_client_engine = sql_db_engine
+        super().__init__(model, vector_db=vector_db)
         self.metadata = {
             'model_specs': model.config_specs,
             'data_sources': ['Chroma Vector Database', 'Relational SQL Database']
@@ -88,7 +97,6 @@ class SQLAndVectorInferenceService(VectorInferenceService):
         self.query_engine = self._construct_query_engine()
 
     def _build_sub_question_vector_query_engine(self):
-        vector_database = load_chroma_client()
         embed_model = HuggingFaceEmbedding(
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             tokenizer_name="sentence-transformers/all-MiniLM-L6-v2",
@@ -105,7 +113,7 @@ class SQLAndVectorInferenceService(VectorInferenceService):
         for info in vector_collection_data:
             name = info['name']
             label = info['label']
-            index = get_collection_index(vector_database, name, self.service_context)
+            index = get_collection_index(self.vector_database, name, self.service_context)
             vector_query_engines[name] = index.as_query_engine(service_context=self.service_context)
             query_engine_tool = QueryEngineTool(
                 query_engine=vector_query_engines[name],
@@ -123,9 +131,8 @@ class SQLAndVectorInferenceService(VectorInferenceService):
 
     def _build_sql_query_engine(self):
         # Construct SQL based query engine
-        sql_db_uri = os.getenv("CLIENT_DB_URI")
-        sql_client_engine = load_db_client(sql_db_uri)
-        sql_db = SQLDatabase(engine=sql_client_engine)
+
+        sql_db = SQLDatabase(engine=self.sql_client_engine)
         table_names = ["company_info", "job_description", "job_post", "job_application"]
         table_node_mapping = SQLTableNodeMapping(sql_db)
         table_schema_objs = []

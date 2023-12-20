@@ -8,8 +8,9 @@ from llama_index.vector_stores.types import VectorStore
 
 # from chromadb.api.models import Collection
 
-from src.models.data_models import JobApplication, JobDescription
-from src.utils.vector_db_utils import get_collection_and_vector_store, get_index, add_document_to_vector_store
+from src.models.data_models import JobApplication, JobDescription, JobPost, Company
+from src.utils.vector_db_utils import get_collection_and_vector_store, get_index, add_document_to_vector_store, \
+    add_object_to_vector_store
 
 
 class DataIngestionService:
@@ -55,6 +56,24 @@ class DataIngestionService:
             ref_name=f"{job_description.job_title}_{job_description.company_id}",
             entity_ref=job_description.id)
 
+    def process_job_post_create(self, job_post: JobPost):
+        store = self.get_store("job_post")
+        index = get_index(store, self._service_context)
+        add_object_to_vector_store(
+            index,
+            obj=job_post,
+            ref_name=f"{job_post.job_description_id}_{job_post.title}",
+            entity_ref=job_post.id)
+
+    def process_company_info_create(self, comp: Company):
+        store = self.get_store("company_info")
+        index = get_index(store, self._service_context)
+        add_object_to_vector_store(
+            index,
+            obj=comp,
+            ref_name=f"{comp.name}",
+            entity_ref=comp.id)
+
     def _process_job_application_update(self, job_application: JobApplication):
         pass
 
@@ -69,7 +88,7 @@ class DataIngestionService:
 
     def get_collection(self, collection_name: str) -> Collection:
         # collection name should either be "resume" or "job_description"
-        if collection_name not in ["resume", "job_description"]:
+        if collection_name not in ["resume", "job_description", "company_info", "job_post"]:
             raise ValueError("Unsupported collection name specified!")
         if collection_name not in self._collections_map:
             col, store = get_collection_and_vector_store(self._vector_client_api, collection_name)
@@ -79,7 +98,7 @@ class DataIngestionService:
 
     def get_store(self, collection_name: str) -> VectorStore:
         # collection name should either be "resume" or "job_description"
-        if collection_name not in ["resume", "job_description"]:
+        if collection_name not in ["resume", "job_description", "company_info", "job_post"]:
             raise ValueError("Unsupported collection name specified!")
         if collection_name not in self._collections_map:
             col, store = get_collection_and_vector_store(self._vector_client_api, collection_name)

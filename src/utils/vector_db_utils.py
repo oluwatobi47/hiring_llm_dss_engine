@@ -1,9 +1,15 @@
+import json
 import os
+import re
+from dataclasses import asdict
 from typing import Union, Optional
 
-from llama_index import VectorStoreIndex, SimpleDirectoryReader
+from llama_index import VectorStoreIndex, SimpleDirectoryReader, Document
 from llama_index.embeddings import HuggingFaceEmbedding
+from llama_index.objects import SimpleObjectNodeMapping
 from llama_index.vector_stores import ChromaVectorStore
+
+from src.models.data_models import JobPost, JobApplication
 
 
 def get_collection_and_vector_store(db, collection_name: str) -> tuple:
@@ -38,6 +44,25 @@ def add_document_to_vector_store(store_index: VectorStoreIndex, file_path: str, 
             doc.metadata['parent_obj_ref'] = entity_ref
             doc.metadata['ref_name'] = ref_name
             store_index.insert(doc)
+        store_index.vector_store.persist("/testing")
+
+
+class CompanyInfo:
+    pass
+
+
+def add_object_to_vector_store(store_index: VectorStoreIndex, obj: JobPost | CompanyInfo | JobApplication,
+                               entity_ref: str, ref_name: str):
+    """Function to create a document with required metadata and storing in vector store with embeddings"""
+    json_output = json.dumps(asdict(obj), indent=0, ensure_ascii=True)
+    lines = json_output.split("\n")
+    useful_lines = [
+        line for line in lines if not re.match(r"^[{}\[\],]*$", line)
+    ]
+    document = Document(text="\n".join(useful_lines))
+    document.metadata['parent_obj_ref'] = entity_ref
+    document.metadata['ref_name'] = ref_name
+    store_index.insert(document)
 
 
 embedding_model: Union[HuggingFaceEmbedding, None] = None
@@ -55,10 +80,20 @@ def get_embedding_model(model_cache_path: Optional[str] = None) -> HuggingFaceEm
 
 
 # Get vector indices
-vector_collection_data = [{
-    "name": "job_description",
-    "label": "Job Descriptions"
-}, {
-    "name": "resume",
-    "label": "Job Applicant Resumes"
-}]
+vector_collection_data = [
+    {
+        "name": "job_description",
+        "label": "Job Descriptions"
+    }, {
+        "name": "resume",
+        "label": "Job Applicant Resumes"
+    },
+    # {
+    #     "name": "job_description",
+    #     "label": "Job Descriptions"
+    # },
+    # {
+    #     "name": "resume",
+    #     "label": "Job Applicant Resumes"
+    # }
+]

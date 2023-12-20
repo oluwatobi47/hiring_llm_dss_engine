@@ -12,8 +12,9 @@ class Benchmarker:
 
     def end(self):
         self.end_time = time.perf_counter()
+        self._compute_execution_time()
 
-    def compute_execution_time(self):
+    def _compute_execution_time(self):
         """
         Computes the execution time
         """
@@ -34,5 +35,5 @@ class Benchmarker:
         self.start()
         output = function(*args, **kwargs)
         self.end()
-        self.compute_execution_time()
+        self._compute_execution_time()
         return output

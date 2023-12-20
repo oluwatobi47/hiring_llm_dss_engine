@@ -1,4 +1,5 @@
 import json
+from typing import Union
 from uuid import uuid4
 
 from fastapi import FastAPI
@@ -14,9 +15,15 @@ def generate_unique_id():
     return str(uuid4())
 
 
-def read_json(json_file_path: str) -> dict:
+def read_json(json_file_path: str) -> Union[dict, list]:
     with open(json_file_path) as json_file:
         return json.load(json_file)
+
+
+def save_json(json_data: dict, file_path_and_name: str):
+    with open(f"{file_path_and_name}", 'w') as f:
+        json.dump(json_data, f, indent=2)
+        f.close()
 
 
 def pair_list_items(list1: list, list2: list) -> list:
@@ -35,3 +42,11 @@ def load_app_routes(app: FastAPI, routes: list):
             tags=route['tags']
         )
 
+
+def get_file_name(link, alternate=None):
+    last_slash_index = link.rfind("/")  # Find the last slash from the right
+
+    if last_slash_index != -1:
+        return link[last_slash_index + 1:]  # Extract characters after the slash
+    else:
+        return link if alternate is None else alternate  # Return the entire string if no slash is found

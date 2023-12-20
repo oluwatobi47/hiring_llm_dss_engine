@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.routers import model_training_router, model_utility_router, data_pipeline_router, inference_router
+from src.routers import model_training_router, model_utility_router, data_pipeline_router, evaluation_router, inference_router
 from src.utils import load_app_routes
 
 # Load Environment Variables
@@ -43,6 +43,11 @@ load_app_routes(app, [
         'prefix': '/train',
         'tags': ['Model Fine-tuning/Training'],
         'router': model_training_router
+    },
+    {
+        'prefix': '/evaluation',
+        'tags': ['Model Evaluation & Metrics'],
+        'router': evaluation_router
     }
 ])
 

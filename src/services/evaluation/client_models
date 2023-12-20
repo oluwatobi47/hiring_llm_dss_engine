@@ -1,0 +1,36 @@
+### Deprecated
+
+# Data Models
+class CompanyInfoModel(BaseModel):
+    __tablename__ = "company_info"
+    address = Column(String)
+    date_founded = Column(String)
+    name = Column(String)
+    mission_statement = Column(String)
+    company_culture_statement = Column(String)
+    vision = Column(String)
+
+
+class JobDescriptionModel(BaseModel):
+    __tablename__ = "job_description"
+    company_id = Column(String)
+    job_title = Column(String)
+    job_description_file = Column(String)
+
+
+class JobPostModel(BaseModel):
+    __tablename__ = "job_post"
+    title = Column(String)
+    job_description_id = Column(String)
+    active = Column(Boolean)
+    salary_range = Column(String)
+
+
+class JobApplicationModel(BaseModel):
+    __tablename__ = "job_application"
+    candidate_email = Column(String)
+    candidate_name = Column(String)
+    job_post_id = Column(String)
+    active = Column(Boolean)
+    resume_link = Column(String)
+
