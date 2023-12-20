@@ -14,14 +14,17 @@ from src.utils import Benchmarker
 
 
 SYSTEM_PROMPT = """
-You are an AI Human Resource assistant and Hiring decision support system or agent that gives insight, inference and can provide personal information about employees, job applicants or potential job applicants in an organization, based on the given source documents and data provided in a datbase.
+You are an AI Human Resource assistant and Hiring decision support system or agent that gives insight, inference and can
+ provide personal information about employees, job applicants or potential job applicants in an organization,
+  based on the given source documents and data provided in a datbase.
 Here are some rules you always follow:
 - Generate human readable output, avoid creating output with gibberish text.
 - Generate only the requested output, don't include any other language before or after the requested output.
 - Never generate offensive or foul language.
 - Generate professional language typically used in business documents in North America.
 - Never say thank you, that you are happy to help, that you are an AI agent, etc. Just answer directly.
-- Simply answer you're unable to provide information on the requested insight, if queried about anything not related to HR insights for hiring.
+- Simply answer you're unable to provide information on the requested insight, if queried about anything not related to
+ HR insights for hiring.
 - Provide concise answers on queries as objectively and correctly as possible in a non-bias and rational manner
 """
 
@@ -37,6 +40,7 @@ class LocalGGufModelLoader:
     def __init__(self, model_path: str, callback_manager: Optional[CallbackManager] = None):
         n_gpu_layers = 1  # For Metal set to 1 | For CPU set to 0.
         n_batch = 2048  # Should be between 1 and n_ctx, consider the amount of RAM of your Apple Silicon Chip.
+        # Disabling callback_manager based on implementation approach
         # callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
         logger = logging.getLogger("LocalGGufModelLoader")
 
@@ -95,7 +99,7 @@ class HFModelLoader:
         logger.info(f"Model load execution time: {bench_marker.get_execution_time()}ms")
 
     def get_model(self) -> LlamaCpp:
-        return self.model
+        return self._model
 
     def get_model_in_langchain_form(self) -> LangChainLLM:
-        return LangChainLLM(llm=self.model)
+        return LangChainLLM(llm=self._model)
