@@ -60,3 +60,8 @@ class ApiResponse(BaseModel, typing.Generic[T]):
         self.status = status
         self.message = message
         self.data = data
+
+
+class UpdateQA(BaseModel):
+    id: int
+    value: bool

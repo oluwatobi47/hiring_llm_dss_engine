@@ -1,11 +1,12 @@
 import os
 import uuid
+from typing import Optional
 
 from dotenv import load_dotenv, find_dotenv
 from fastapi import APIRouter
 from starlette.background import BackgroundTasks
 
-from src.models.utility_models import ModelType, InferenceEngineType, ApiResponse
+from src.models.utility_models import ModelType, InferenceEngineType, ApiResponse, UpdateQA
 from src.services.data import load_chroma_client
 from src.services.data_pipeline import DataIngestionService
 from src.services.evaluation import SimulationService, MetricsDataService, EvaluationBatch
@@ -14,7 +15,6 @@ from src.utils.vector_db_utils import get_embedding_model
 
 load_dotenv(find_dotenv('.env'))
 simulation_vector_db_path = os.getenv("SIMULATION_CHROMA_DB_PATH")
-# os.rmdir(simulation_vector_db_path)
 chroma_db_client = load_chroma_client(simulation_vector_db_path)
 
 # Run Simulation based on the vector data source layer
@@ -26,6 +26,7 @@ inference_service = inference_service_factory.create_inference_service(
         "vector_db_uri": simulation_vector_db_path
     }
 )
+inference_service = None
 metrics_service = MetricsDataService()
 ingestion_service = DataIngestionService(chroma_db_client, get_embedding_model())
 
@@ -76,15 +77,23 @@ def get_all_evaluation_batches() -> ApiResponse:
     return ApiResponse(status="success", data=data)
 
 
-@router.get("/batch-results")
-def get_all_evaluation_results_cases(batch_nos: list[str], question_nos: list[str]) -> ApiResponse:
+@router.post("/batch-results")
+def get_evaluation_results(batch_ids: list[int], question_nos: Optional[list[str]]) -> ApiResponse:
     data = None
     try:
-        # TODO: Update service call and update service class signature
-        data = metrics_service.get_evaluation_batches()
+        data = metrics_service.get_batch_evaluation_results(batch_ids)
     except Exception as e:
-        return ApiResponse(status="success", message=str(e))
+        return ApiResponse(status="error", message=str(e))
     return ApiResponse(status="success", data=data)
+
+
+@router.patch("/update-qa-value", description="For updating truthful QA analysis/acceptance on model response to corresponding question")
+def get_evaluation_results(request: UpdateQA) -> ApiResponse:
+    try:
+        metrics_service.update_qa_value(request.id, request.value)
+    except Exception as e:
+        return ApiResponse(status="error", message=str(e))
+    return ApiResponse(status="success", message="Update successful")
 
 
 @router.get("/operation-metrics")
