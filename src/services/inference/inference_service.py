@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -9,6 +10,7 @@ from llama_index.embeddings import HuggingFaceEmbedding
 from llama_index.indices.struct_store import SQLTableRetrieverQueryEngine
 from llama_index.objects import SQLTableNodeMapping, SQLTableSchema, ObjectIndex
 from llama_index.query_engine import SubQuestionQueryEngine, SQLJoinQueryEngine
+from llama_index.response.schema import StreamingResponse
 from llama_index.tools import QueryEngineTool, ToolMetadata
 from sqlalchemy import Engine
 
@@ -30,11 +32,16 @@ class InferenceService:
         pass
 
     def refresh_datasource(self):
+        """Call when there's changes to datasets"""
         self.query_engine = self._construct_query_engine()
+
+    def get_token_count(self, text: str) -> int:
+        return self.model.get_num_tokens(text)
 
 
 class VectorInferenceService(InferenceService):
-    def __init__(self, model, vector_db: ClientAPI):
+    def __init__(self, model, vector_db: ClientAPI, use_json_embeddings=False):
+        self.use_json_embeddings = True
         self.vector_database = vector_db
         self.model = model
         self.metadata = {
@@ -42,6 +49,53 @@ class VectorInferenceService(InferenceService):
             'data_sources': ['Chroma Vector Database']
         }
         self.query_engine = self._construct_query_engine()
+
+    def _construct_composable_graph_query_engine(self, collection_data: list):
+        """Constructs a Composable graph Query engine from collection data"""
+
+        # Load the vector collections in the vector store
+        vector_stores = {}
+        vector_indices = {}
+        index_summaries = []
+
+        for info in collection_data:
+            name = info['name']
+            label = info['label']
+            coll, store = get_collection_and_vector_store(self.vector_database, name)
+            vector_stores[name] = store
+            vector_indices[name] = get_index(store, service_context=self.service_context)
+            index_summaries.append(f"Provides detailed information about {label}")
+        storage_context = StorageContext.from_defaults(vector_stores=vector_stores)
+
+        graph = ComposableGraph(all_indices=vector_indices, root_id="resume", storage_context=storage_context)
+        return graph.as_query_engine(streaming=True)
+
+    def _construct_sub_question_query_engine(self, collection_data):
+        """Constructs a SubQuestion Query engine from collection data"""
+        # List of query engines from different data sources
+        query_engine_tools = []
+
+        # Load the vector collections in the vector store
+        vector_query_engines = {}
+
+        for info in collection_data:
+            name = info['name']
+            label = info['label']
+            index = get_collection_index(self.vector_database, name, self.service_context)
+            vector_query_engines[name] = index.as_query_engine(service_context=self.service_context, streaming=True)
+            query_engine_tool = QueryEngineTool(
+                query_engine=vector_query_engines[name],
+                metadata=ToolMetadata(
+                    name=name, description=f"Provides detailed information about {label}"
+                ),
+            )
+            query_engine_tools.append(query_engine_tool)
+
+        vector_engine = SubQuestionQueryEngine.from_defaults(
+            service_context=self.service_context,
+            query_engine_tools=query_engine_tools,
+        )
+        return vector_engine
 
     def _construct_query_engine(self) -> BaseQueryEngine:
         """
@@ -55,30 +109,27 @@ class VectorInferenceService(InferenceService):
         )
         self.service_context = ServiceContext.from_defaults(llm=self.model, embed_model=embed_model)
 
-        # Load the vector collections in the vector store
-        vector_stores = {}
-        vector_indices = {}
-        index_summaries = []
+        collection_data = vector_collection_data if self.use_json_embeddings is True else vector_collection_data[:2]
 
-        for info in vector_collection_data:
-            name = info['name']
-            label = info['label']
-            coll, store = get_collection_and_vector_store(self.vector_database, name)
-            vector_stores[name] = store
-            vector_indices[name] = get_index(store, service_context=self.service_context)
-            index_summaries.append(f"Provides detailed information about {label}")
-        storage_context = StorageContext.from_defaults(vector_stores=vector_stores)
+        # Use one of the engines below
 
-        graph = ComposableGraph(all_indices=vector_indices, root_id="resume", storage_context=storage_context)
-        return graph.as_query_engine()
+        # THIS
+        # engine = self._construct_sub_question_query_engine(collection_data)
 
-    def generate_response(self, prompt: str) -> Response:
+        # OR
+        engine = self._construct_composable_graph_query_engine(collection_data)
+        return engine
+
+    def generate_response(self, prompt: str) -> str:
         bm = Benchmarker()
         result = bm.benchmark_function(self.query_engine.query, prompt)
-        logger = logging.getLogger(self.__class__.__name__)
-        logger.info(f"Model load execution time: {bm.get_execution_time()}ms")
-        print(f">>>Model load execution time: {bm.get_execution_time()}ms")
-        return result.response
+        bm.end()
+        print(f">>>Inference execution time: {bm.get_execution_time()}s")
+        if isinstance(result, StreamingResponse):
+            res = result.get_response()
+            return res.response
+        elif isinstance(result, Response):
+            return result.response
 
     def refresh_datasource(self):
         self.query_engine = self._construct_query_engine()
@@ -95,39 +146,6 @@ class SQLAndVectorInferenceService(VectorInferenceService):
             'data_sources': ['Chroma Vector Database', 'Relational SQL Database']
         }
         self.query_engine = self._construct_query_engine()
-
-    def _build_sub_question_vector_query_engine(self):
-        embed_model = HuggingFaceEmbedding(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
-            tokenizer_name="sentence-transformers/all-MiniLM-L6-v2",
-            cache_folder=os.getenv("EMBEDDING_MODEL_CACHE")
-        )
-        self.service_context = ServiceContext.from_defaults(llm=self.model, embed_model=embed_model)
-
-        # List of query engines from different data sources
-        query_engine_tools = []
-
-        # Load the vector collections in the vector store
-        vector_query_engines = {}
-
-        for info in vector_collection_data:
-            name = info['name']
-            label = info['label']
-            index = get_collection_index(self.vector_database, name, self.service_context)
-            vector_query_engines[name] = index.as_query_engine(service_context=self.service_context)
-            query_engine_tool = QueryEngineTool(
-                query_engine=vector_query_engines[name],
-                metadata=ToolMetadata(
-                    name=name, description=f"Provides detailed information about {label}"
-                ),
-            )
-            query_engine_tools.append(query_engine_tool)
-
-        vector_engine = SubQuestionQueryEngine.from_defaults(
-            service_context=self.service_context,
-            query_engine_tools=query_engine_tools
-        )
-        return vector_engine
 
     def _build_sql_query_engine(self):
         # Construct SQL based query engine

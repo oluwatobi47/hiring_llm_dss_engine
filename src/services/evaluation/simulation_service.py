@@ -1,3 +1,4 @@
+import json
 import os
 
 from src.services.data_pipeline.data_ingestion_service import DataIngestionService
@@ -39,15 +40,17 @@ class SimulationService:
 
     def _clean_data(self):
         """Clears vector store of all collection data"""
-        # self.data_ingestion_service.get_client().reset()
+        self.data_ingestion_service.get_client().reset()
+        self.data_ingestion_service.refresh_datasource()
+
         # Collections in vector DB
-        collections = ["company", "resume", "job_post", "job_description"]
-        for collection_name in collections:
-            if collection_name in map(lambda x: x.name, self.data_ingestion_service.get_client().list_collections()):
-                collection = self.data_ingestion_service.get_client().get_collection(collection_name)
-                if len(collection.get()["ids"]) > 0:
-                    collection.delete(collection.get()["ids"])
-                    self.data_ingestion_service.get_client().clear_system_cache()
+        # collections = ["company", "resume", "job_post", "job_description"]
+        # for collection_name in collections:
+        #     if collection_name in map(lambda x: x.name, self.data_ingestion_service.get_client().list_collections()):
+        #         collection = self.data_ingestion_service.get_client().get_collection(collection_name)
+        #         if len(collection.get()["ids"]) > 0:
+        #             collection.delete(collection.get()["ids"])
+        #             self.data_ingestion_service.get_client().clear_system_cache()
 
     def run_simulation(self, simulation_batch: EvaluationBatch):
         questions_path = "{}/truthful_qa_questions.json".format(os.getenv("EVAL_DATA_PATH"))
@@ -70,6 +73,9 @@ class SimulationService:
         # Write data to data stores
         self._write_data_to_stores(dataset)
 
+        # Re-construct query_engine
+        self.inference_service.refresh_datasource()
+
         benchmarker = Benchmarker()
         benchmarker.start()
         process_bm = Benchmarker()
@@ -85,12 +91,21 @@ class SimulationService:
                 error = str(e)
             finally:
                 process_bm.end()
+                prompt_token = self.inference_service.get_token_count(question['question'])
+                response_token = self.inference_service.get_token_count(response)
+
+                extra_info = {
+                    "prompt_token": prompt_token,
+                    "response_token": response_token
+                }
+                metadata = json.dumps(extra_info)
                 metric_data = EvaluationResults(
                     batch_id=simulation_batch.id,
                     question_id=question["number"],
                     response=response,
                     error=error,
-                    execution_time=process_bm.get_execution_time()
+                    execution_time=process_bm.get_execution_time(),
+                    process_metadata=metadata
                 )
                 self.metrics_service.get_db_session().add(metric_data)
                 self.metrics_service.get_db_session().commit()

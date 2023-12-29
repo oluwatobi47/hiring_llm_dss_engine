@@ -88,12 +88,12 @@ vector_collection_data = [
         "name": "resume",
         "label": "Job Applicant Resumes"
     },
-    # {
-    #     "name": "job_description",
-    #     "label": "Job Descriptions"
-    # },
-    # {
-    #     "name": "resume",
-    #     "label": "Job Applicant Resumes"
-    # }
+    {
+        "name": "job_post",
+        "label": "Job Posts"
+    },
+    {
+        "name": "company_info",
+        "label": "Parent Company Information that contains all Jo descriptions, Job Posts, and Job Applications from candidates"
+    }
 ]

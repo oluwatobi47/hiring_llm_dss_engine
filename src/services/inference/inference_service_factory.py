@@ -14,6 +14,7 @@ load_dotenv(find_dotenv('.env'))
 _defaultConfig = {
     "db_uri": os.getenv("CLIENT_DB_URI"),
     "vector_db_uri": os.getenv("CHROMA_PATH"),
+    "use_json_embeddings": False
 }
 
 
@@ -54,7 +55,8 @@ class InferenceServiceFactory:
             return SQLAndVectorInferenceService(model=self._model_instance_map[model_type], vector_db=vector_database,
                                                 sql_db_engine=sql_db_engine)
         elif rag_engine_type == InferenceEngineType.VECTOR:
-            return VectorInferenceService(model=self._model_instance_map[model_type], vector_db=vector_database)
+            return VectorInferenceService(model=self._model_instance_map[model_type], vector_db=vector_database,
+                                          use_json_embeddings=config_data["use_json_embeddings"])
         else:
             # TODO: Implement a default inference service (Out of current project scope)
             raise ValueError("Invalid engine type specified")

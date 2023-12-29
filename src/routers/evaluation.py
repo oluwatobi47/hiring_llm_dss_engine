@@ -1,4 +1,5 @@
 import os
+import traceback
 import uuid
 from typing import Optional
 
@@ -6,7 +7,7 @@ from dotenv import load_dotenv, find_dotenv
 from fastapi import APIRouter
 from starlette.background import BackgroundTasks
 
-from src.models.utility_models import ModelType, InferenceEngineType, ApiResponse, UpdateQA
+from src.models.utility_models import ModelType, InferenceEngineType, ApiResponse, UpdateQA, InferencePrompt
 from src.services.data import load_chroma_client
 from src.services.data_pipeline import DataIngestionService
 from src.services.evaluation import SimulationService, MetricsDataService, EvaluationBatch
@@ -23,10 +24,11 @@ inference_service = inference_service_factory.create_inference_service(
     model_type=ModelType.HUGGING_FACE_GGUF,
     rag_engine_type=InferenceEngineType.VECTOR,
     config={
-        "vector_db_uri": simulation_vector_db_path
+        "vector_db_uri": simulation_vector_db_path,
+        "use_json_embeddings": True
     }
 )
-inference_service = None
+# inference_service = None
 metrics_service = MetricsDataService()
 ingestion_service = DataIngestionService(chroma_db_client, get_embedding_model())
 
@@ -87,7 +89,8 @@ def get_evaluation_results(batch_ids: list[int], question_nos: Optional[list[str
     return ApiResponse(status="success", data=data)
 
 
-@router.patch("/update-qa-value", description="For updating truthful QA analysis/acceptance on model response to corresponding question")
+@router.patch("/update-qa-value",
+              description="For updating truthful QA analysis/acceptance on model response to corresponding question")
 def get_evaluation_results(request: UpdateQA) -> ApiResponse:
     try:
         metrics_service.update_qa_value(request.id, request.value)
@@ -104,3 +107,14 @@ def get_all_operation_metrics() -> ApiResponse:
     except Exception as e:
         return ApiResponse(status="success", message=str(e))
     return ApiResponse(status="success", data=data)
+
+
+@router.post("/inference")
+def generate_inference(request: InferencePrompt) -> ApiResponse:
+    try:
+        response = inference_service.generate_response(request.prompt)
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        return ApiResponse(status="error", message=str(e))
+    return ApiResponse(status="success", data=response)

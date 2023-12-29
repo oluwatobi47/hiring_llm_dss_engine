@@ -4,15 +4,10 @@ from typing import Optional
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from src.models.utility_models import InferenceEngineType, ModelType, ApiResponse
+from src.models.utility_models import InferenceEngineType, ModelType, ApiResponse, InferencePrompt
 from src.services.inference import InferenceService, inference_service_factory
 
 router = APIRouter()
-
-
-class InferencePrompt(BaseModel):
-    prompt: str
-    context: Optional[str] = None
 
 
 # PS/NOTE: The Integration into SQL data sources is currently experimental,

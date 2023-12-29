@@ -65,3 +65,8 @@ class ApiResponse(BaseModel, typing.Generic[T]):
 class UpdateQA(BaseModel):
     id: int
     value: bool
+
+
+class InferencePrompt(BaseModel):
+    prompt: str
+    context: Optional[str] = None

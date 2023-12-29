@@ -29,11 +29,11 @@ load_app_routes(app, [
         'tags': ['Model Utilities: Background operations (Download/Upload)'],
         'router': model_utility_router
     },
-    # {
-    #     'prefix': '/inference',
-    #     'tags': ['Model Inference generation on data sources'],
-    #     'router': inference_router
-    # },
+    {
+        'prefix': '/inference',
+        'tags': ['Model Inference generation on data sources'],
+        'router': inference_router
+    },
     {
         'prefix': '/pipeline',
         'tags': ['Data Pipeline Processing'],

@@ -32,6 +32,10 @@ class DataIngestionService:
     def get_client(self):
         return self._vector_client_api
 
+    def refresh_datasource(self):
+        self._collections_map = {}
+        self._vector_store_map = {}
+
     def process_job_application_create(self, job_application: JobApplication):
         if not bool(job_application) or not hasattr(job_application, 'resume_link'):
             print(f"Skipping data processing for Job Application: {job_application}")

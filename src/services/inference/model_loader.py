@@ -42,28 +42,29 @@ class LocalGGufModelLoader:
         n_batch = 2048  # Should be between 1 and n_ctx, consider the amount of RAM of your Apple Silicon Chip.
         # Disabling callback_manager based on implementation approach
         # callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
-        logger = logging.getLogger("LocalGGufModelLoader")
 
         bench_marker = Benchmarker()
-        logger.info("Loading LlamaCPP model")
+        print("Loading LlamaCPP model")
         bench_marker.start()
         self._model = LlamaCpp(
             model_path=model_path,
             n_gpu_layers=n_gpu_layers,
             n_batch=n_batch,
-            n_ctx=3072,  # 2560, 2048
+            max_tokens=2048,
+            n_ctx=3072,  # 2560, 2048, 3072
             f16_kv=True,  # MUST set to True, otherwise you will run into problem after a couple of calls
             callback_manager=callback_manager,
             verbose=True,
             model_kwargs={
                 "query_wrapper_prompt": query_wrapper_prompt,
                 "device": torch.device("mps"),
-                "max_new_tokens": 4096,
+                "max_new_tokens": 2048,
             },
             temperature=0.5,
+            streaming=True
         )
         bench_marker.end()
-        logger.info(f"Model load execution time: {bench_marker.get_execution_time()}ms")
+        print(f"LocalGGufModelLoader: Model load execution time: {bench_marker.get_execution_time()}ms")
 
     def get_model(self) -> LlamaCpp:
         return self._model
@@ -95,8 +96,7 @@ class HFModelLoader:
             # uncomment this if using CUDA to reduce memory usage
             model_kwargs={"torch_dtype": torch.float16}
         )
-        logger = logging.getLogger("HFModelLoader")
-        logger.info(f"Model load execution time: {bench_marker.get_execution_time()}ms")
+        print(f"HFModelLoader: Model load execution time: {bench_marker.get_execution_time()}s")
 
     def get_model(self) -> LlamaCpp:
         return self._model

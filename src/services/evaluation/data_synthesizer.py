@@ -5,6 +5,7 @@ from dataclasses import dataclass, asdict
 from typing import Optional
 
 from src.models.data_models import JobDescription, JobPost, JobApplication, Company
+from src.services.evaluation.random_names import candidate_names
 from src.utils import save_json, get_files, get_file_name, read_json
 
 
@@ -116,12 +117,18 @@ class DataSynthesizer:
         documents = get_files(resume_path, extension_matcher="*.pdf")
         random_doc_indices = random.sample(range(len(documents)), min(limit, len(documents)))
         jp_pool_range = range(len(job_post_pool))
+
+        def get_candidate_name(names, index):
+            if index < len(names):
+                return names[index]
+            else:
+                return f"{random.choice(names)} {index}"
         for index in range(len(random_doc_indices)):
             job_applications.append(
                 JobApplication(
                     id=str(uuid.uuid4()),
                     created_date=str(datetime.datetime.now()),
-                    candidate_name=f"Job Applicant {index}",
+                    candidate_name=get_candidate_name(candidate_names, index),
                     candidate_email=f"job_applicant_{index}@hr_dss_email.com",
                     job_post_id=job_post_pool[random.choice(jp_pool_range)].id,
                     resume_link=documents[index],
