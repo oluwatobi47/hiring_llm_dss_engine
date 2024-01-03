@@ -37,7 +37,7 @@ def show_collection_data(collection):
 
 
 def add_document_to_vector_store(store_index: VectorStoreIndex, file_path: str, entity_ref: str, ref_name: str):
-    """Function to create a document with required metadata and storing in vectore store with embeddings"""
+    """Function to create a document with required metadata and storing in vector store with embeddings"""
     document = SimpleDirectoryReader(input_files=[file_path]).load_data()
     if len(document) > 0:
         for doc in document:

@@ -47,7 +47,7 @@ class InferenceServiceFactory:
             model_loader = LocalGGufModelLoader(self._local_model_path)
             self._model_instance_map[model_type] = model_loader.get_model()
             # TODO: Implement ModelType Based Loader to support other model formats (Future development)
-            #  only GGUF models are fully supported for inferencing due to GPU computational resource requirements
+            #  only GGUF models are fully supported for inference due to GPU computational resource requirements for this study
 
         if rag_engine_type == InferenceEngineType.VECTOR_AND_SQL:
             # Link DB to existing client data infrastructure

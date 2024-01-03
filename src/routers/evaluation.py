@@ -7,7 +7,7 @@ from dotenv import load_dotenv, find_dotenv
 from fastapi import APIRouter
 from starlette.background import BackgroundTasks
 
-from src.models.utility_models import ModelType, InferenceEngineType, ApiResponse, UpdateQA, InferencePrompt
+from src.models.utility_models import ModelType, InferenceEngineType, ApiResponse, UpdateQA, InferencePrompt, BatchIds
 from src.services.data import load_chroma_client
 from src.services.data_pipeline import DataIngestionService
 from src.services.evaluation import SimulationService, MetricsDataService, EvaluationBatch
@@ -80,10 +80,10 @@ def get_all_evaluation_batches() -> ApiResponse:
 
 
 @router.post("/batch-results")
-def get_evaluation_results(batch_ids: list[int], question_nos: Optional[list[str]]) -> ApiResponse:
+def get_evaluation_results(request: BatchIds) -> ApiResponse:
     data = None
     try:
-        data = metrics_service.get_batch_evaluation_results(batch_ids)
+        data = metrics_service.get_batch_evaluation_results(request.batch_ids)
     except Exception as e:
         return ApiResponse(status="error", message=str(e))
     return ApiResponse(status="success", data=data)

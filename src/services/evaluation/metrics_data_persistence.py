@@ -95,6 +95,7 @@ class MetricsDataService:
         def add_question_info(obj: EvaluationResults):
             data = vars(obj)
             data["question"] = question_map[obj.question_id]['question']
+            data["hint"] = question_map[obj.question_id]['hint']
             data["expected_response"] = question_map[obj.question_id]['response']
             return data
 

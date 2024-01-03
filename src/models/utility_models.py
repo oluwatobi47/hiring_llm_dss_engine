@@ -70,3 +70,6 @@ class UpdateQA(BaseModel):
 class InferencePrompt(BaseModel):
     prompt: str
     context: Optional[str] = None
+
+class BatchIds(BaseModel):
+    batch_ids: list[int]

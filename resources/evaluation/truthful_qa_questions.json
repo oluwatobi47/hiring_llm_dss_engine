@@ -2,51 +2,62 @@
   {
     "number": 1,
     "question": "What can you tell me about Oluwatobi Alao ?",
-    "response": "Oluwatobi is a highly motivated and passionate individual with over four years of progressive experience in the complete product development lifecycle of successfully launched applications and software solutions with proven ability to leverage full-stack knowledge and experience to build interactive and user-centred applications"
+    "response": "Oluwatobi is a highly motivated and passionate individual with over four years of progressive experience in the complete product development lifecycle of successfully launched applications and software solutions with proven ability to leverage full-stack knowledge and experience to build interactive and user-centred applications",
+    "hint": ""
   },
   {
     "number": 2,
     "question": "Who would be the best candidate for the Software Engineer role ?",
-    "response": "Oluwatobi would be a suitable candidate"
+    "response": "Oluwatobi would be a suitable candidate",
+    "hint": ""
   },
   {
     "number": 3,
     "question": "How many years of work experience does Oluwatobi have ?",
-    "response": "Overall, Oluwatobi has over 4 years of work experience, and precisely about 6 years of work experience from the information provided"
+    "response": "Overall, Oluwatobi has over 4 years of work experience, and precisely about 6 years of work experience from the information provided",
+    "hint": ""
   },
   {
     "number": 4,
-    "question": "Based on the General Practice Doctor job description, which of the job applications would be most suited for such a position if it were open ",
-    "response": "PS: System should answer accordingly based on information provided in each test case. For test cases 1 and 2, no candidate is well suited. For others some candidates may be well suited based on available simulation dataset"
+    "question": "Based on the General Practice Doctor job description, which of the job applications would be most suited for such a position if it were open ?",
+    "response": "No candidate is well suited for this job description.",
+    "hint": "For test cases 1 and 2 No candidate is well suited for the role PS: System should answer accordingly based on information provided in each test case."
   },
   {
     "number": 5,
     "question": "What job posts would Oluwatobi be best suited for as a job applicant ?",
-    "response": "Oluwatobi would be well suited to fit in the role of a web developer or a Software engineer"
+    "response": "Oluwatobi would be well suited to fit in the role of a web developer or a Software engineer",
+    "hint": ""
   },
   {
     "number": 6,
     "question": "Who would you consider to be the best candidates for the Software engineer role, list them ?",
-    "response": "From the information, provided, Oluwatobi would be a good candidate, also other candidates having similar skill sets would be well suited. PS: Answer from knowledge base would suggest the most suitable candidates"
+    "response": "From the information, provided, Oluwatobi would be a good candidate, also other candidates having similar skill sets would be well suited, namely Liliana Ramirez and Kamari Parker",
+    "hint": "PS: Answer from knowledge base would suggest the most suitable candidates. New suggestions for Liliana Ramirez from TC 7 and kamari Parker in TC 10"
+
   },
   {
     "number": 7,
     "question": "Should the company hire David Doe for the Senior Accountant role ? If yes, then why ?",
-    "response": "David would be a suitable candidate for the position of Senior Accountant due to the fact that he possesses and extensive number of years of experience in the industry. PS: Response should be relevant to the context"
+    "response": "David would be a suitable candidate for the position of Senior Accountant due to the fact that he possesses and extensive number of years of experience in the industry.",
+    "hint": "PS: Response should be relevant to the context"
   },
     {
     "number": 8,
     "question": "What insights can be deduced from Oluwatobis Academic Background ? ",
-    "response": "Oluwatobi has a Bachelor of Science Degree in Computer Science"
+    "response": "Oluwatobi has a Bachelor of Science Degree in Computer Science",
+    "hint": ""
   },
     {
     "number": 9,
     "question": "Given the companies vision statement and the information from the job applications who would be the top 5 best candidates and what positions could they fill best ?",
-    "response": "PS: Answer should be related in some context to the available information in the knowledge base"
+    "response": "Oluwatobi Alao, David Doe",
+    "hint": "PS: Answer should be related in some context to the available information in the knowledge base"
   },
     {
     "number": 10,
     "question": "Give a brief summary about David Doe",
-    "response": "David Doe is an Accountant. PS: Answer should be related in some context to the last statement"
+    "response": "David Doe is an Accountant.",
+    "hint": "PS: Model should most likely generate a more robust answer related in some context to the prompt and expected response defined"
   }
 ]
