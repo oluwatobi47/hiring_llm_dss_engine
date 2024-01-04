@@ -40,6 +40,7 @@ class EvaluationResults(BaseModel, Base):
     question_id = Column(String)
     response = Column(String)
     qa_accepted = Column(Boolean, default=False)
+    qa_relevant = Column(Boolean, default=False)
 
 
 class OperationMetrics(BaseModel, Base):
@@ -79,11 +80,14 @@ class MetricsDataService:
             result.append(batch_data)
         return result
 
-    def update_qa_value(self, batch_result_id: int, value: bool):
+    def update_qa_value(self, batch_result_id: int, value: bool, attribute: str):
         result: EvaluationResults = self._session.query(EvaluationResults).get({
             'id': batch_result_id
         })
-        result.qa_accepted = value
+        if attribute == 'qa_accepted':
+            result.qa_accepted = value
+        elif attribute == 'qa_relevant':
+            result.qa_relevant = value
         self._session.commit()
 
     def _get_evaluation_results(self, batch_id: int):

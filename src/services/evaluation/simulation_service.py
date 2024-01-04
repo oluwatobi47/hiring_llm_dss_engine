@@ -52,15 +52,19 @@ class SimulationService:
         #             collection.delete(collection.get()["ids"])
         #             self.data_ingestion_service.get_client().clear_system_cache()
 
-    def run_simulation(self, simulation_batch: EvaluationBatch):
+    def get_questions(self) -> list:
         questions_path = "{}/truthful_qa_questions.json".format(os.getenv("EVAL_DATA_PATH"))
+        return read_json(questions_path)
+
+
+    def run_simulation(self, simulation_batch: EvaluationBatch):
         datapool_path = "{}/evaluation_data_pool.json".format(os.getenv("EVAL_DATA_PATH"))
         base_test_case_data_path = "{}/base_test_case_data.json".format(os.getenv("EVAL_DATA_PATH"))
         test_case_config_path = "{}/test_case_config.json".format(os.getenv("EVAL_DATA_PATH"))
 
         # Load testcase configuration and data
         test_case_config = read_json(test_case_config_path)
-        questions: list = read_json(questions_path)
+        questions: list = self.get_questions()
         data_synthesizer = DataSynthesizer(
             datapool_path=datapool_path,
             base_test_case_path=base_test_case_data_path,

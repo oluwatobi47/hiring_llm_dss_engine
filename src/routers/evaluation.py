@@ -67,6 +67,10 @@ def run_simulation(test_case_code: str, bg_tasks: BackgroundTasks) -> ApiRespons
 def get_all_test_cases() -> ApiResponse:
     data = simulation_service.get_test_cases()
     return ApiResponse(status="success", data=data)
+@router.get("/questions")
+def get_all_test_cases() -> ApiResponse:
+    data = simulation_service.get_questions()
+    return ApiResponse(status="success", data=data)
 
 
 @router.get("/batches")
@@ -93,7 +97,7 @@ def get_evaluation_results(request: BatchIds) -> ApiResponse:
               description="For updating truthful QA analysis/acceptance on model response to corresponding question")
 def get_evaluation_results(request: UpdateQA) -> ApiResponse:
     try:
-        metrics_service.update_qa_value(request.id, request.value)
+        metrics_service.update_qa_value(request.id, request.value, request.attribute)
     except Exception as e:
         return ApiResponse(status="error", message=str(e))
     return ApiResponse(status="success", message="Update successful")
