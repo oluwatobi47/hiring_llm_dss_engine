@@ -19,3 +19,5 @@ Steps
 
 For Quantization: Follow instructions on read me for the llama.cpp repository to quantize the fine-tuned model files:
 (For this project: this was done on colab)
+
+PS: For this service to run, a quantized model has to be present with all required references defined in the .env file to the right directory
