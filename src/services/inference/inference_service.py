@@ -132,6 +132,7 @@ class VectorInferenceService(InferenceService):
 
     def generate_response(self, prompt: str) -> str:
         bm = Benchmarker()
+        bm.start()
         result = self.query_engine.query(prompt)
         bm.end()
         print(f">>>Inference execution time: {bm.get_execution_time()}s")
