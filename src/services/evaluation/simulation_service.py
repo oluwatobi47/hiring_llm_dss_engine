@@ -43,15 +43,6 @@ class SimulationService:
         self.data_ingestion_service.get_client().reset()
         self.data_ingestion_service.refresh_datasource()
 
-        # Collections in vector DB
-        # collections = ["company", "resume", "job_post", "job_description"]
-        # for collection_name in collections:
-        #     if collection_name in map(lambda x: x.name, self.data_ingestion_service.get_client().list_collections()):
-        #         collection = self.data_ingestion_service.get_client().get_collection(collection_name)
-        #         if len(collection.get()["ids"]) > 0:
-        #             collection.delete(collection.get()["ids"])
-        #             self.data_ingestion_service.get_client().clear_system_cache()
-
     def get_questions(self) -> list:
         questions_path = "{}/truthful_qa_questions.json".format(os.getenv("EVAL_DATA_PATH"))
         return read_json(questions_path)

@@ -9,7 +9,7 @@ from llama_index.embeddings import HuggingFaceEmbedding
 from llama_index.objects import SimpleObjectNodeMapping
 from llama_index.vector_stores import ChromaVectorStore
 
-from src.models.data_models import JobPost, JobApplication
+from src.models.data_models import JobPost, JobApplication, Company, JobDescription
 
 
 def get_collection_and_vector_store(db, collection_name: str) -> tuple:
@@ -47,11 +47,7 @@ def add_document_to_vector_store(store_index: VectorStoreIndex, file_path: str, 
         store_index.vector_store.persist("/testing")
 
 
-class CompanyInfo:
-    pass
-
-
-def add_object_to_vector_store(store_index: VectorStoreIndex, obj: JobPost | CompanyInfo | JobApplication,
+def add_object_to_vector_store(store_index: VectorStoreIndex, obj: JobPost | Company | JobApplication | JobDescription,
                                entity_ref: str, ref_name: str):
     """Function to create a document with required metadata and storing in vector store with embeddings"""
     json_output = json.dumps(asdict(obj), indent=0, ensure_ascii=True)
@@ -94,6 +90,6 @@ vector_collection_data = [
     },
     {
         "name": "company_info",
-        "label": "Parent Company Information that contains all Jo descriptions, Job Posts, and Job Applications from candidates"
+        "label": "Parent Company Information that contains all Job descriptions, Job Posts, and Job Applications from candidates"
     }
 ]

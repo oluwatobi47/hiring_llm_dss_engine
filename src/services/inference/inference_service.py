@@ -41,7 +41,7 @@ class InferenceService:
 
 class VectorInferenceService(InferenceService):
     def __init__(self, model, vector_db: ClientAPI, use_json_embeddings=False):
-        self.use_json_embeddings = True
+        self.use_json_embeddings = use_json_embeddings
         self.vector_database = vector_db
         self.model = model
         self.metadata = {
@@ -69,6 +69,16 @@ class VectorInferenceService(InferenceService):
 
         graph = ComposableGraph(all_indices=vector_indices, root_id="resume", storage_context=storage_context)
         return graph.as_query_engine(streaming=True)
+
+        # Improved RAG after evaluation increasing top_k similarity and similarity threshold
+        # return graph.as_query_engine(
+        #     streaming=True,
+        #     similarity_top_k=3,
+        #     vector_store_query_mode=VectorStoreQueryMode.MMR,
+        #     mmr_threshold=0.7,
+            # vector_store_kwargs={"mmr_threshold": 0.7, "include":['distances']}
+            # vector_store_kwargs={"include":['distances']}
+        # )
 
     def _construct_sub_question_query_engine(self, collection_data):
         """Constructs a SubQuestion Query engine from collection data"""
@@ -122,7 +132,7 @@ class VectorInferenceService(InferenceService):
 
     def generate_response(self, prompt: str) -> str:
         bm = Benchmarker()
-        result = bm.benchmark_function(self.query_engine.query, prompt)
+        result = self.query_engine.query(prompt)
         bm.end()
         print(f">>>Inference execution time: {bm.get_execution_time()}s")
         if isinstance(result, StreamingResponse):

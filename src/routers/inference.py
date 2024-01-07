@@ -38,3 +38,17 @@ def generate_inference(request: InferencePrompt,
         traceback.print_exc()
         return ApiResponse(status="error", message=str(e))
     return ApiResponse(status="success", data=response)
+
+
+@router.get("/refresh")
+def refresh_datasource(engine_type: InferenceEngineType = InferenceEngineType.VECTOR) -> ApiResponse:
+    try:
+        if engine_type == InferenceEngineType.VECTOR:
+            response = document_inference_service.refresh_datasource()
+        else:
+            response = inference_service.refresh_datasource()
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        return ApiResponse(status="error", message=str(e))
+    return ApiResponse(status="success", data=response)

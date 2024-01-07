@@ -14,7 +14,7 @@ load_dotenv(find_dotenv('.env'))
 _defaultConfig = {
     "db_uri": os.getenv("CLIENT_DB_URI"),
     "vector_db_uri": os.getenv("CHROMA_PATH"),
-    "use_json_embeddings": False
+    "use_json_embeddings": True
 }
 
 
