@@ -45,6 +45,7 @@ def clean_collection_data(collection_name: str, ref_id: str = None) -> ApiRespon
             })
         else:
             client.delete_collection(collection_name)
+        data_ingestion_service.refresh_datasource()
     except Exception as e:
         traceback.print_exc()
         return ApiResponse(status="error", message=str(e))
@@ -90,6 +91,7 @@ def clean_simulation_collection_data(collection_name: str, ref_id: str = None) -
             })
         else:
             client.delete_collection(collection_name)
+            simulation_ingestion_service.refresh_datasource()
     except Exception as e:
         traceback.print_exc()
         return ApiResponse(status="error", message=str(e))
