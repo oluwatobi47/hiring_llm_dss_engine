@@ -123,11 +123,11 @@ class VectorInferenceService(InferenceService):
 
         # Use one of the engines below
 
-        # THIS
-        # engine = self._construct_sub_question_query_engine(collection_data)
+        # THIS YIELDS IMPROVED MODEL RESPONSES
+        engine = self._construct_sub_question_query_engine(collection_data)
 
         # OR
-        engine = self._construct_composable_graph_query_engine(collection_data)
+        # engine = self._construct_composable_graph_query_engine(collection_data)
         return engine
 
     def generate_response(self, prompt: str) -> str:
